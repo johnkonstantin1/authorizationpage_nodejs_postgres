@@ -34,8 +34,17 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+// app.get("/users/register", checkAuthenticated, (req, res) => {
+//   res.render("register");
+// });
 app.get("/users/register", checkAuthenticated, (req, res) => {
-  res.render("register");
+  pool.query(`SELECT * FROM countries`, (err, result) => {
+    if (err) {
+      throw err;
+    }
+
+    res.render("register", { countries: result.rows });
+  });
 });
 
 app.get("/users/login", checkAuthenticated, (req, res) => {
@@ -62,9 +71,9 @@ app.get("/users/logout", (req, res) => {
 });
 
 app.post("/users/register", async (req, res) => {
-  let { name, email, password, password2, birthdate } = req.body;
-  console.log({ name, email, password, password2, birthdate });
-
+  let { name, email, password, password2, birthdate, country } = req.body;
+  console.log({ name, email, password, password2, birthdate, country });
+  let country_id = req.body.country;
   let errors = [];
   //validation
   if (!name || !email || !password || !password2) {
@@ -83,7 +92,7 @@ app.post("/users/register", async (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render("register", { errors });
+    res.render("register", { errors, countries });
   } else {
     let hashedPass = await bcrypt.hash(password, 10);
     console.log(hashedPass);
@@ -103,10 +112,10 @@ app.post("/users/register", async (req, res) => {
           res.render("register", { errors });
         } else {
           pool.query(
-            `INSERT INTO users (name, email, password, birthdate)
-                VALUES($1, $2, $3, $4)
+            `INSERT INTO users (name, email, password, birthdate, country_id)
+                VALUES($1, $2, $3, $4, $5)
                 RETURNING id, password`,
-            [name, email, hashedPass, birthdate],
+            [name, email, hashedPass, birthdate, country_id],
             (err, result) => {
               if (err) {
                 throw err;
@@ -147,31 +156,6 @@ function checknotAuthenticated(req, res, next) {
   }
   res.redirect("/users/login");
 }
-/////////////////taking countries from database table
-// const getCountries = async () => {
-//   const query = 'SELECT id, name FROM countries';
-//   const { rows } = await pool.query(query);
-//   return rows;
-// };
-
-// app.get("/users/register", async (req, res) => {
-//   const countries = await getCountries();
-//   // get countries from the database
-//   pool.query("SELECT id, name FROM countries", (err, result) => {
-//     if (err) {
-//       console.error("Error fetching countries from database", err);
-//       res.send("Error fetching countries");
-//     } else {
-//       // Render the registration form with the list of countries
-//       res.render("/users/register", { countries: result.rows });
-//     }
-//   });
-// });
-
-// app.get("/users/register", (req, res) => {
-//   res.render("register", { countries: req.country.name, id: req.country.email });
-// });
-//////////////////////
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -112,6 +112,14 @@
           />
         </div>
         <div>
+          <label for="country">Country</label>
+          <select name="country" id="country">
+            <% countries.forEach(function(country) { %>
+            <option value="<%= country.id %>"><%= country.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
           <input
             type="submit"
             value="Register"
