@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+      integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="
+        background-color: bisque;
+        text-align: center;
+        width: 50%;
+        margin: 0 auto;
+      "
+    >
+      <h1>Register</h1>
+
+      <ul>
+        <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => {
+        %>
+        <li><%= error.message %></li>
+        <% }) %> <% } %>
+      </ul>
+
+      <form action="/users/register" method="POST">
+        <div>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="NAME"
+            style="
+              border: 1px solid #ccc;
+              background-color: #fff;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 16px;
+            "
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="EMAIL"
+            style="
+              border: 1px solid #ccc;
+              background-color: #fff;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 16px;
+            "
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="PASSWORD"
+            style="
+              border: 1px solid #ccc;
+              background-color: #fff;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 16px;
+            "
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            placeholder="CONFIRM A PASSWORD"
+            style="
+              border: 1px solid #ccc;
+              background-color: #fff;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 16px;
+            "
+            required
+          />
+        </div>
+        <div>
+          <label for="birthdate">Birthdate:</label>
+          <input
+            type="date"
+            name="birthdate"
+            id="birthdate"
+            style="
+              border: 1px solid #ccc;
+              background-color: #fff;
+              padding: 8px;
+              border-radius: 4px;
+              font-size: 16px;
+            "
+          />
+        </div>
+        <div>
+          <input
+            type="submit"
+            value="Register"
+            style="background-color: white"
+          />
+        </div>
+      </form>
+      <a href="/users/login">Already registered? Login here</a>
+    </div>
+  </body>
+</html>
